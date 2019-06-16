@@ -8,7 +8,21 @@
 <script>
 function displayDate(){
 	xmlhttp=new XMLHttpRequest();
-    url="/g/getData";
+    url="/getData";
+    xmlhttp.onreadystatechange=function()
+	{
+		if (xmlhttp.readyState==4 && xmlhttp.status==200)
+		{
+			document.getElementById("demo").innerHTML=xmlhttp.responseText;
+		}
+	}
+	xmlhttp.open("GET",url,true); //第三个参数是同步异步,主线程只能异步
+    xmlhttp.send(); 
+}
+
+function signIn(){
+	xmlhttp=new XMLHttpRequest();
+    url="/SignIn?UserName=zsk&UserPhone=187&UserPasswd=123";
     xmlhttp.onreadystatechange=function()
 	{
 		if (xmlhttp.readyState==4 && xmlhttp.status==200)
@@ -27,5 +41,5 @@ function displayDate(){
 <p id="demo">这是一个段落</p>
 
 <button type="button" onclick="displayDate()">获取数据</button>
-
+<button type="button" onclick="signIn()">注册</button>
 </html>

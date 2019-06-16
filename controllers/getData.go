@@ -19,7 +19,7 @@ func GetData(ctx *macaron.Context) {
 	userInfos := make([]*dbcontrollers.UserInfo, 0)
 	userInfo := &dbcontrollers.UserInfo{}
 	userInfos = userInfo.GetUserInfoSQL("")
-	fmt.Println("-------------", userInfos[0], userInfos[1])
+	fmt.Println("-------------", userInfos[0])
 	ctx.JSON(200, &ContextResult{
 		Ok:   true,
 		Data: &userInfos,

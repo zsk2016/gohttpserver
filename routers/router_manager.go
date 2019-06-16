@@ -40,6 +40,7 @@ func RegistGroupRouter(m *macaron.Macaron) {
 func RegistRouter(m *macaron.Macaron) {
 	m.Any("/", controllers.Default)
 	m.Any("/getData", controllers.GetData)
+	m.Any("/SignIn", controllers.SignInFun)
 	//	m.Any("/regist", controllers.Regist)
 	//	m.Any("/register", controllers.Register)
 	//	m.Any("/useragreement", controllers.UserAgreement)

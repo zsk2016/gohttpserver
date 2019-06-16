@@ -33,8 +33,8 @@ type UserInfo struct {
 	UserPhone  string    `json:"UserPhone" xorm:"varchar(20)"`
 	UserEmail  string    `json:"UserEmail" xorm:"varchar(255)"`
 	UserType   string    `json:"UserType" xorm:"int"`
-	CreateTime time.Time `json:"BDate" xorm:"datetime"`
-	UpdateTime time.Time `json:"BDate" xorm:"datetime"`
+	CreateTime time.Time `json:"CreateTime" xorm:"datetime"`
+	UpdateTime time.Time `json:"UpdateTime" xorm:"datetime"`
 }
 
 func (p *UserInfo) GetUserInfoSQL(querystring string, args ...interface{}) []*UserInfo {
@@ -46,9 +46,9 @@ func (p *UserInfo) GetUserInfoSQL(querystring string, args ...interface{}) []*Us
 
 func InitXorm() {
 	var err error
-	PrefixMapper := "AE_"
+	PrefixMapper := "AK_"
 	dbc := "user=%s password=%s port=%s dbname=%s host=%s sslmode=disable"
-	connString := fmt.Sprintf(dbc, "postgres", "1982911zsk", "5432", "database_userinfo", "localhost")
+	connString := fmt.Sprintf(dbc, "postgres", "postgres", "5432", "bmdata", "localhost")
 	dbdriver := "postgres"
 	fmt.Println(connString)
 	orm, err = xorm.NewEngine(dbdriver, connString)
