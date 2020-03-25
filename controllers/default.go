@@ -11,3 +11,7 @@ type Context struct {
 func Default(ctx *macaron.Context) {
 	ctx.HTML(200, "pages/index")
 }
+
+func ImageShow(ctx *macaron.Context) {
+	ctx.HTML(200, "pages/imageshow")
+}

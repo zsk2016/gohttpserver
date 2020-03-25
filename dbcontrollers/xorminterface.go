@@ -26,23 +26,23 @@ func PanicIf(err error, format string, v ...interface{}) {
 	}
 }
 
-type UserInfo struct {
-	Id         string    `json:"Id" xorm:"varchar(36)"`
-	UserId     string    `json:"UserId" xorm:"varchar(36)"`
-	UserName   string    `json:"UserName" xorm:"varchar(255)"`
-	UserPhone  string    `json:"UserPhone" xorm:"varchar(20)"`
-	UserEmail  string    `json:"UserEmail" xorm:"varchar(255)"`
-	UserType   string    `json:"UserType" xorm:"int"`
-	CreateTime time.Time `json:"CreateTime" xorm:"datetime"`
-	UpdateTime time.Time `json:"UpdateTime" xorm:"datetime"`
-}
+// type UserInfo struct {
+// 	Id         string    `json:"Id" xorm:"varchar(36)"`
+// 	UserId     string    `json:"UserId" xorm:"varchar(36)"`
+// 	UserName   string    `json:"UserName" xorm:"varchar(255)"`
+// 	UserPhone  string    `json:"UserPhone" xorm:"varchar(20)"`
+// 	UserEmail  string    `json:"UserEmail" xorm:"varchar(255)"`
+// 	UserType   string    `json:"UserType" xorm:"int"`
+// 	CreateTime time.Time `json:"CreateTime" xorm:"datetime"`
+// 	UpdateTime time.Time `json:"UpdateTime" xorm:"datetime"`
+// }
 
-func (p *UserInfo) GetUserInfoSQL(querystring string, args ...interface{}) []*UserInfo {
-	userInfos := make([]*UserInfo, 0)
-	err := GetOrm().Where(querystring, args...).Find(&userInfos)
-	PanicIf(err, "fail to GetUserInfoSQL")
-	return userInfos
-}
+// func (p *UserInfo) GetUserInfoSQL(querystring string, args ...interface{}) []*UserInfo {
+// 	userInfos := make([]*UserInfo, 0)
+// 	err := GetOrm().Where(querystring, args...).Find(&userInfos)
+// 	PanicIf(err, "fail to GetUserInfoSQL")
+// 	return userInfos
+// }
 
 func InitXorm() {
 	var err error

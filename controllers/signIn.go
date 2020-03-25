@@ -4,9 +4,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"gohttpserver/tools"
+	"strconv"
 	"time"
 
 	"gohttpserver/models"
+
+	"strings"
 
 	"github.com/satori/go.uuid"
 	"gopkg.in/macaron.v1"
@@ -30,12 +33,27 @@ func SignInFun(ctx *macaron.Context) {
 		fmt.Println(signInInfo.UserName, signInInfo.EmailAddr)
 		userInfo := models.UserInfo{}
 
-		UId, flag := userInfo.GetMaxUserId()
-		if flag == true {
-			fmt.Println(UId)
+		whereStr := `"UserName" = ?`
+		userInfos := userInfo.GetUserInfoSQL(whereStr, signInInfo.UserName)
+		if len(userInfos) > 0 {
+			ctx.JSON(200, &ContextResult{
+				Ok:   false,
+				Data: "SignIn err has same name",
+			})
+			return
 		}
 
+		UId, flag := userInfo.GetMaxUserId()
+		var UIdMaxInt int
+		if flag == true {
+			string_slice := strings.Split(UId, "-")
+			strMax := string_slice[1]
+			UIdMaxInt, err = strconv.Atoi(strMax)
+		}
+		strUId := fmt.Sprintf("U-%010d", UIdMaxInt+1)
+
 		userInfo.Id = uuid.String()
+		userInfo.UserId = strUId
 		userInfo.UserName = signInInfo.UserName
 		userInfo.UserEmail = signInInfo.EmailAddr
 		userInfo.UserPasswd = signInInfo.Passwd

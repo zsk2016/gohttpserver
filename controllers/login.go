@@ -16,10 +16,11 @@ type LogInInfo struct {
 }
 
 func LogInFun(ctx *macaron.Context) {
-	fmt.Println("------login-----")
+
 	jsonStr := ctx.Query("LogIn")
 	logInInfo := &LogInInfo{}
 	err := json.Unmarshal([]byte(jsonStr), logInInfo)
+	fmt.Println("------login  sadsad -----", err, logInInfo.UserName, logInInfo.Passwd)
 	var ret bool = false
 	if err == nil {
 		userInfo := &models.UserInfo{}
@@ -27,12 +28,13 @@ func LogInFun(ctx *macaron.Context) {
 		userInfos = userInfo.GetUserInfoSQL("")
 		for _, v := range userInfos {
 			if v.UserName == logInInfo.UserName && v.UserPasswd == logInInfo.Passwd {
+				fmt.Println("--------has -----", true)
 				ret = true
 			}
 		}
 	}
 
-	if err != nil {
+	if err == nil {
 		ret = true
 	}
 

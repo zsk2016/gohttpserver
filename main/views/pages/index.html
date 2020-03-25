@@ -1,45 +1,37 @@
-
 <!DOCTYPE html>
-<html>
-<body>
-参数: <input id='fileinput' type='text'/><br>
-<button type='button' onclick='window.location.href = "LcPdf:" + document.getElementById("fileinput").value'>PDF阅读器</button>
-
-<script>
-function displayDate(){
-	xmlhttp=new XMLHttpRequest();
-    url="/getData";
-    xmlhttp.onreadystatechange=function()
-	{
-		if (xmlhttp.readyState==4 && xmlhttp.status==200)
-		{
-			document.getElementById("demo").innerHTML=xmlhttp.responseText;
-		}
-	}
-	xmlhttp.open("GET",url,true); //第三个参数是同步异步,主线程只能异步
-    xmlhttp.send(); 
-}
-
-function signIn(){
-	xmlhttp=new XMLHttpRequest();
-    url="/SignIn?UserName=zsk&UserPhone=187&UserPasswd=123";
-    xmlhttp.onreadystatechange=function()
-	{
-		if (xmlhttp.readyState==4 && xmlhttp.status==200)
-		{
-			document.getElementById("demo").innerHTML=xmlhttp.responseText;
-		}
-	}
-	xmlhttp.open("GET",url,true); //第三个参数是同步异步,主线程只能异步
-    xmlhttp.send(); 
-}
-</script>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="text/javascript" src="/js/qwebchannel.js"></script>
+    <script type="text/javascript" src="/js/login.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/index.css">
 </head>
 <body>
-
-<h1>JavaScript</h1>
-<p id="demo">这是一个段落</p>
-
-<button type="button" onclick="displayDate()">获取数据</button>
-<button type="button" onclick="signIn()">注册</button>
+    <form name="login">
+        <center>
+            <div>
+                <h2>
+                    大树PDF欢迎你!
+                </h2>
+                <p>
+                    用户名: <input id="UserName" type="text"/>
+                </p>
+                <p>
+                    密&emsp;码: <input id="UserPass" type="password"/>
+                </p>
+                <p>
+                    <input id=log type="submit" value="登录" onclick="LogInFun()" />
+                </p>
+                <p>
+                    <a href="register.html">立即注册</a>
+                </p>
+            </div>
+            <div>
+                <p id="retData">返回显示区域</p>
+            </div>
+        </center>
+    </form> 
+</body>
 </html>
