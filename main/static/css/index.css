@@ -1,0 +1,28 @@
+form
+    {
+        width: 100%;
+        height: 700p;
+        margin-top: 0px;
+        background: #005f8b;
+    }
+    div
+    {
+        display:inline-block;
+        padding-top: 80px;
+        padding-right: 20px;
+    }
+    input
+    {
+        height: 30px;
+    }
+    h2
+    {
+        font-family: "微软雅黑";
+        font-size: 40px;
+        color: rgb(0, 0, 0);
+    }
+    #log
+    {
+        width: 100px;
+        color: blue;
+    }
