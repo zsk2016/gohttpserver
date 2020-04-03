@@ -8,6 +8,7 @@ import (
 type Realize struct {
 	Id            string    `xorm:"not null VARCHAR(36)"`
 	RealizeId     string    `xorm:"VARCHAR(36)"`
+	BtnId         string    `xorm:"VARCHAR(36)"`
 	PriceId       string    `xorm:"VARCHAR(36)"`
 	RealizeType   string    `xorm:"VARCHAR(36)"`
 	RealizeName   string    `xorm:"VARCHAR(255)"`

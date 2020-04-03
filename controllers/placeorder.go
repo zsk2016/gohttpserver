@@ -3,7 +3,8 @@ package controllers
 import (
 	"fmt"
 	"gohttpserver/models"
-	"strconv"
+
+	// "strconv"
 	"strings"
 	"time"
 
@@ -13,6 +14,7 @@ import (
 
 type OrderInfo struct {
 	UserName     string
+	OrderId      string
 	RealizeId    string
 	ValidityTime string
 }
@@ -31,10 +33,23 @@ func GetNowOrderId(ctx *macaron.Context) {
 func PlaceOrderFun(ctx *macaron.Context) {
 	fmt.Println("------PlaceOrder-----")
 	orderInfo := &OrderInfo{}
-	orderInfo.UserName = ctx.Query("UserName")
-	orderInfo.RealizeId = ctx.Query("RealizeId")
-	orderInfo.ValidityTime = ctx.Query("ValidityTime")
-
+	// orderInfo.UserName = ctx.Query("UserName")
+	// orderInfo.OrderId = ctx.Query("OrderId")
+	// orderInfo.RealizeId = ctx.Query("RealizeId")
+	// orderInfo.ValidityTime = ctx.Query("ValidityTime")
+	strData := ctx.Query("Data")
+	kv := strings.Split(strData, "|")
+	if len(kv) != 4 {
+		ctx.JSON(200, &ContextResult{
+			Ok:   false,
+			Data: "PlaceOrder",
+		})
+		return
+	}
+	orderInfo.UserName = kv[0]
+	orderInfo.OrderId = kv[1]
+	orderInfo.RealizeId = kv[2]
+	orderInfo.ValidityTime = kv[3]
 	uid := GetUserIdByUserName(orderInfo.UserName)
 
 	if uid == "0" {
@@ -48,15 +63,15 @@ func PlaceOrderFun(ctx *macaron.Context) {
 	order := models.Order{}
 	orderId, _ := uuid.NewV4()
 	order.Id = orderId.String()
-	UId, flag := order.GetMaxOrderId()
-	var UIdMaxInt int
-	if flag == true {
-		string_slice := strings.Split(UId, "-")
-		strMax := string_slice[1]
-		UIdMaxInt, _ = strconv.Atoi(strMax)
-	}
-	strUId := fmt.Sprintf("O-%010d", UIdMaxInt+1)
-	order.OrderId = strUId
+	// UId, flag := order.GetMaxOrderId()
+	// var UIdMaxInt int
+	// if flag == true {
+	// 	string_slice := strings.Split(UId, "-")
+	// 	strMax := string_slice[1]
+	// 	UIdMaxInt, _ = strconv.Atoi(strMax)
+	// }
+	// strUId := fmt.Sprintf("O-%010d", UIdMaxInt+1)
+	order.OrderId = orderInfo.OrderId
 	order.UserId = uid
 	order.RealizeId = orderInfo.RealizeId
 	order.CreateTime = time.Now()

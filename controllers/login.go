@@ -22,14 +22,16 @@ func LogInFun(ctx *macaron.Context) {
 	err := json.Unmarshal([]byte(jsonStr), logInInfo)
 	fmt.Println("------login  sadsad -----", err, logInInfo.UserName, logInInfo.Passwd)
 	var ret bool = false
+	userInfo := &models.UserInfo{}
 	if err == nil {
-		userInfo := &models.UserInfo{}
 		userInfos := make([]*models.UserInfo, 0)
 		userInfos = userInfo.GetUserInfoSQL("")
 		for _, v := range userInfos {
 			if v.UserName == logInInfo.UserName && v.UserPasswd == logInInfo.Passwd {
 				fmt.Println("--------has -----", true)
 				ret = true
+				userInfo.UserId = v.UserId
+				userInfo.UserName = v.UserName
 			}
 		}
 	}
@@ -41,7 +43,8 @@ func LogInFun(ctx *macaron.Context) {
 	fmt.Println("--------ret-----", ret)
 
 	ctx.JSON(200, &ContextResult{
-		Ok:   ret,
-		Data: "LogIn",
+		Ok:    ret,
+		Data:  "LogIn",
+		Value: &userInfo,
 	})
 }

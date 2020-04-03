@@ -6,8 +6,10 @@ import (
 
 type RealizeAndPrice struct {
 	Id    string `xorm:"VARCHAR(36)"`
+	BtnId string `xorm:"VARCHAR(36)"`
 	Name  string `xorm:"VARCHAR(36)"`
 	Value string `xorm:"VARCHAR(36)"`
+	Ptime string `xorm:"VARCHAR(36)"`
 }
 
 func (p *RealizeAndPrice) GetRealizeAndPriceSQL(querystring string, args ...interface{}) []*RealizeAndPrice {
@@ -20,8 +22,10 @@ func (p *RealizeAndPrice) GetRealizeAndPriceSQL(querystring string, args ...inte
 	for _, v := range dataMap {
 		rap := &RealizeAndPrice{}
 		rap.Id = v["id"]
+		rap.BtnId = v["btnid"]
 		rap.Name = v["name"]
 		rap.Value = v["value"]
+		rap.Ptime = v["ptime"]
 		raps = append(raps, rap)
 	}
 	return raps
