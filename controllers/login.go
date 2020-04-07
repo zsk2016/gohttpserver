@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	// "gohttpserver/dbcontrollers"
+	"gohttpserver/dbcontrollers"
 	"gohttpserver/models"
 
 	"gopkg.in/macaron.v1"
@@ -13,6 +13,14 @@ import (
 type LogInInfo struct {
 	UserName string
 	Passwd   string
+	CpuId    string
+}
+
+func changeCpuId(cpuId, userName string) {
+	fmt.Println("---changeCpuId---")
+	sqlUpdate := `UPDATE "AK_UserInfo" SET "CpuId" = ? WHERE "AK_UserInfo"."UserName" = ?`
+	res, err := dbcontrollers.GetOrm().Exec(sqlUpdate, cpuId, userName)
+	fmt.Println(res, err)
 }
 
 func LogInFun(ctx *macaron.Context) {
@@ -32,8 +40,10 @@ func LogInFun(ctx *macaron.Context) {
 				ret = true
 				userInfo.UserId = v.UserId
 				userInfo.UserName = v.UserName
+				userInfo.CpuId = v.CpuId
 			}
 		}
+		changeCpuId(logInInfo.CpuId, logInInfo.UserName)
 	}
 
 	if err == nil {

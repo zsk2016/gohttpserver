@@ -21,6 +21,9 @@ type SignInInfo struct {
 	Passwd    string
 	Company   string
 	Phone     string
+	UserType  string
+	PcNum     string
+	CpuId     string
 }
 
 func SignInFun(ctx *macaron.Context) {
@@ -59,7 +62,9 @@ func SignInFun(ctx *macaron.Context) {
 		userInfo.UserPasswd = signInInfo.Passwd
 		userInfo.UserCompany = signInInfo.Company
 		userInfo.UserPhone = signInInfo.Phone
-		userInfo.UserType = "0"
+		userInfo.UserType = signInInfo.UserType
+		userInfo.PcNum = signInInfo.PcNum
+		userInfo.CpuId = signInInfo.CpuId
 		userInfo.CreateTime = time.Now()
 		userInfo.UpdateTime = time.Now()
 

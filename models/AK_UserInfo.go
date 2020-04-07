@@ -15,6 +15,8 @@ type UserInfo struct {
 	UserEmail   string    `xorm:"VARCHAR(255)"`
 	UserCompany string    `xorm:"VARCHAR(255)"`
 	UserType    string    `xorm:"VARCHAR(36)"`
+	PcNum       string    `xorm:"VARCHAR(36)"`
+	CpuId       string    `xorm:"VARCHAR(36)"`
 	CreateTime  time.Time `xorm:"DATETIME"`
 	UpdateTime  time.Time `xorm:"DATETIME"`
 }

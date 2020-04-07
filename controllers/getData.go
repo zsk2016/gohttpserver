@@ -3,6 +3,8 @@ package controllers
 import (
 	"fmt"
 	// "gohttpserver/dbcontrollers"
+	"encoding/json"
+	"gohttpserver/dbcontrollers"
 	"gohttpserver/models"
 
 	"gopkg.in/macaron.v1"
@@ -16,6 +18,10 @@ type ContextResult struct {
 	Err     interface{}
 }
 
+type UserNameInfo struct {
+	UserName string
+}
+
 func GetData(ctx *macaron.Context) {
 	fmt.Println("-------getuserinfo------")
 	userInfos := make([]*models.UserInfo, 0)
@@ -25,6 +31,28 @@ func GetData(ctx *macaron.Context) {
 	ctx.JSON(200, &ContextResult{
 		Ok:   true,
 		Data: &userInfos,
+	})
+}
+
+func GetUserCpuId(ctx *macaron.Context) {
+	fmt.Println("-------GetUserCpuId------")
+	jsonStr := ctx.Query("GetCpuId")
+	uni := &UserNameInfo{}
+	err := json.Unmarshal([]byte(jsonStr), uni)
+	ret := false
+	retValue := ""
+	if err == nil {
+		sqlll := `SELECT "AK_UserInfo"."CpuId" from "AK_UserInfo" WHERE "AK_UserInfo"."UserName" = ?`
+		dataMap, _ := dbcontrollers.GetOrm().QueryString(sqlll, uni.UserName)
+		if len(dataMap) == 1 {
+			ret = true
+			retValue = dataMap[0]["CpuId"]
+		}
+	}
+	ctx.JSON(200, &ContextResult{
+		Ok:    ret,
+		Data:  "GetCpuId",
+		Value: retValue,
 	})
 }
 

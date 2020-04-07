@@ -41,6 +41,7 @@ func RegistRouter(m *macaron.Macaron) {
 	m.Any("/", controllers.Default)
 	m.Any("/imageShow", controllers.ImageShow)
 	m.Any("/getData", controllers.GetData)
+	m.Any("/GetUserCpuId", controllers.GetUserCpuId)
 	m.Any("/SignIn", controllers.SignInFun)
 	m.Any("/LogIn", controllers.LogInFun)
 	m.Any("/PlaceOrder", controllers.PlaceOrderFun)
