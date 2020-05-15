@@ -2,10 +2,14 @@ package controllers
 
 import (
 	"fmt"
+	// "sort"
+	// "strconv"
+
 	// "gohttpserver/dbcontrollers"
 	"encoding/json"
 	"gohttpserver/dbcontrollers"
 	"gohttpserver/models"
+	"time"
 
 	"gopkg.in/macaron.v1"
 )
@@ -19,6 +23,7 @@ type ContextResult struct {
 }
 
 type UserNameInfo struct {
+	UserId   string
 	UserName string
 }
 
@@ -53,6 +58,54 @@ func GetUserCpuId(ctx *macaron.Context) {
 		Ok:    ret,
 		Data:  "GetCpuId",
 		Value: retValue,
+	})
+}
+
+// func calTimeLeft(dm []map[string]string) {
+// 	var keys []int
+// 	timeTemplate1 := "2006-01-02T15:04:05Z"
+// 	for _, v := range dm {
+// 		t1 := v["CreateTime"]
+// 		stamp, _ := time.ParseInLocation(timeTemplate1, t1, time.Local)
+// 		vInt := stamp.Unix()
+// 		fmt.Println("============", vInt)
+// 		strInt64 := strconv.FormatInt(vInt, 10)
+// 		id16, _ := strconv.Atoi(strInt64)
+// 		keys = append(keys, id16)
+// 	}
+
+// 	sort.Ints(keys)
+
+// 	for _, value := range keys {
+// 		fmt.Println("---dmvalue---", dm[value]["CreateTime"])
+// 	}
+
+// }
+
+func GetOrderByUser(ctx *macaron.Context) {
+	fmt.Println("-------GetOrderByUser------")
+	jsonStr := ctx.Query("GetOrderByUser")
+	uni := &UserNameInfo{}
+	err := json.Unmarshal([]byte(jsonStr), uni)
+	ret := false
+	if err == nil {
+		sql := `SELECT *from "AK_Order" WHERE "UserId" = ?`
+		dataMap, _ := dbcontrollers.GetOrm().QueryString(sql, uni.UserId)
+		timeTemplate1 := "2006-01-02T15:04:05Z"
+		for _, value := range dataMap {
+			t1 := value["CreateTime"]
+			stamp, _ := time.ParseInLocation(timeTemplate1, t1, time.Local)
+			tt := time.Now()
+			residueTime := tt.Unix() - stamp.Unix()
+			fmt.Println("---residue---", residueTime)
+		}
+		//calTimeLeft(dataMap)
+	}
+
+	ctx.JSON(200, &ContextResult{
+		Ok:    ret,
+		Data:  "GetOrderByUser",
+		Value: "123",
 	})
 }
 

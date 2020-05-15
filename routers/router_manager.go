@@ -47,6 +47,7 @@ func RegistRouter(m *macaron.Macaron) {
 	m.Any("/PlaceOrder", controllers.PlaceOrderFun)
 	m.Any("/GetNowOrderId", controllers.GetNowOrderId)
 	m.Any("/GetRealize", controllers.GetRealize)
+	m.Any("/GetOrderByUser", controllers.GetOrderByUser)
 	//	m.Any("/regist", controllers.Regist)
 	//	m.Any("/register", controllers.Register)
 	//	m.Any("/useragreement", controllers.UserAgreement)
