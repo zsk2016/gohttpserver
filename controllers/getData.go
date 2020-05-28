@@ -3,7 +3,7 @@ package controllers
 import (
 	"fmt"
 	// "sort"
-	// "strconv"
+	"strconv"
 
 	// "gohttpserver/dbcontrollers"
 	"encoding/json"
@@ -25,6 +25,15 @@ type ContextResult struct {
 type UserNameInfo struct {
 	UserId   string
 	UserName string
+}
+
+type RetOrderInfo struct {
+	UserId     string
+	UserName   string
+	RemainTime string
+	IfValid    bool
+	MustUpdate bool
+	Info       string
 }
 
 func GetData(ctx *macaron.Context) {
@@ -88,24 +97,38 @@ func GetOrderByUser(ctx *macaron.Context) {
 	uni := &UserNameInfo{}
 	err := json.Unmarshal([]byte(jsonStr), uni)
 	ret := false
+	roi := &RetOrderInfo{}
+	roi.UserId = uni.UserId
+	roi.UserName = uni.UserName
+	roi.IfValid = false
+	roi.RemainTime = "0"
+	roi.MustUpdate = false
+	roi.Info = "版本不是最新无法登入!!!"
 	if err == nil {
 		sql := `SELECT *from "AK_Order" WHERE "UserId" = ?`
 		dataMap, _ := dbcontrollers.GetOrm().QueryString(sql, uni.UserId)
 		timeTemplate1 := "2006-01-02T15:04:05Z"
+		rt := 0
 		for _, value := range dataMap {
 			t1 := value["CreateTime"]
+			vts := value["ValidityTime"]
+			vti, _ := strconv.Atoi(vts)
 			stamp, _ := time.ParseInLocation(timeTemplate1, t1, time.Local)
 			tt := time.Now()
 			residueTime := tt.Unix() - stamp.Unix()
 			fmt.Println("---residue---", residueTime)
+
+			rt = vti - int(residueTime/3600)
+			break
 		}
 		//calTimeLeft(dataMap)
+		roi.RemainTime = strconv.Itoa(rt)
 	}
-
+	ret = true
 	ctx.JSON(200, &ContextResult{
 		Ok:    ret,
 		Data:  "GetOrderByUser",
-		Value: "123",
+		Value: &roi,
 	})
 }
 

@@ -3,11 +3,11 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
+	"gohttpserver/models"
 	"gohttpserver/tools"
+	"regexp"
 	"strconv"
 	"time"
-
-	"gohttpserver/models"
 
 	"strings"
 
@@ -26,6 +26,13 @@ type SignInInfo struct {
 	CpuId     string
 }
 
+func VerifyEmailFormat(email string) bool {
+	//pattern := `\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*` //匹配电子邮箱
+	pattern := `^[0-9a-z][_.0-9a-z-]{0,31}@([0-9a-z][0-9a-z-]{0,30}[0-9a-z]\.){1,4}[a-z]{2,4}$`
+	reg := regexp.MustCompile(pattern)
+	return reg.MatchString(email)
+}
+
 func SignInFun(ctx *macaron.Context) {
 	fmt.Println("------sign in-----")
 	jsonStr := ctx.Query("SignIn")
@@ -36,12 +43,30 @@ func SignInFun(ctx *macaron.Context) {
 		fmt.Println(signInInfo.UserName, signInInfo.EmailAddr)
 		userInfo := models.UserInfo{}
 
+		if !VerifyEmailFormat(signInInfo.EmailAddr) {
+			ctx.JSON(200, &ContextResult{
+				Ok:   false,
+				Data: "注册邮箱格式不对!!!",
+			})
+			return
+		}
+
 		whereStr := `"UserName" = ?`
 		userInfos := userInfo.GetUserInfoSQL(whereStr, signInInfo.UserName)
 		if len(userInfos) > 0 {
 			ctx.JSON(200, &ContextResult{
 				Ok:   false,
-				Data: "SignIn err has same name",
+				Data: "该注册的用户名已经存在!!!",
+			})
+			return
+		}
+
+		whereStr1 := `"UserEmail" = ?`
+		userInfos1 := userInfo.GetUserInfoSQL(whereStr1, signInInfo.EmailAddr)
+		if len(userInfos1) > 0 {
+			ctx.JSON(200, &ContextResult{
+				Ok:   false,
+				Data: "该注册的邮箱已经存在!!!",
 			})
 			return
 		}
