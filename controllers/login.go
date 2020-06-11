@@ -24,7 +24,9 @@ func changeCpuId(cpuId, userName string) {
 }
 
 func LogInFun(ctx *macaron.Context) {
-
+	//ctx.Resp.Header().Set("Access-Control-Allow-Origin", "*")
+	// ctx.Resp.Header().Set("Access-Control-Allow-Headers", "content-type,token")
+	// ctx.Resp.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT")
 	jsonStr := ctx.Query("LogIn")
 	logInInfo := &LogInInfo{}
 	err := json.Unmarshal([]byte(jsonStr), logInInfo)

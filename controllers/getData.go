@@ -58,6 +58,7 @@ func GetUserCpuId(ctx *macaron.Context) {
 	if err == nil {
 		sqlll := `SELECT "AK_UserInfo"."CpuId" from "AK_UserInfo" WHERE "AK_UserInfo"."UserName" = ?`
 		dataMap, _ := dbcontrollers.GetOrm().QueryString(sqlll, uni.UserName)
+		fmt.Println(len(dataMap))
 		if len(dataMap) == 1 {
 			ret = true
 			retValue = dataMap[0]["CpuId"]
@@ -92,6 +93,7 @@ func GetUserCpuId(ctx *macaron.Context) {
 // }
 
 func GetOrderByUser(ctx *macaron.Context) {
+	//ctx.Resp.Header().Set("Access-Control-Allow-Origin", "*")
 	fmt.Println("-------GetOrderByUser------")
 	jsonStr := ctx.Query("GetOrderByUser")
 	uni := &UserNameInfo{}

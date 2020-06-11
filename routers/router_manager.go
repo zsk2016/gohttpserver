@@ -23,6 +23,7 @@ func RegistGlobalRouter(m *macaron.Macaron) {
 	m.Use(macaron.Recovery())
 	m.Use(session.Sessioner())
 	m.Use(macaron.Static("static"))
+	m.Use(macaron.Static("views"))
 	m.Use(pongo2.Pongoer(pongo2.Options{
 		Directory:  "views",
 		IndentJSON: macaron.Env != macaron.PROD,

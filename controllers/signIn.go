@@ -34,6 +34,7 @@ func VerifyEmailFormat(email string) bool {
 }
 
 func SignInFun(ctx *macaron.Context) {
+	//ctx.Resp.Header().Set("Access-Control-Allow-Origin", "*")
 	fmt.Println("------sign in-----")
 	jsonStr := ctx.Query("SignIn")
 	signInInfo := &SignInInfo{}
