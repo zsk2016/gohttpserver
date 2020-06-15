@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<script type="text/javascript" src="/js/webrequest.js"></script>
+	<script type="text/javascript" src="/js/pricelist.js"></script>
+	<link rel="stylesheet" href="/css/pricelist.css">
+</head>
+
+<body>
+	<h2 class="logintitle" align="center">价目表</h2>
+	<table class="realizetable">
+		<tr>
+			<th class="col-select">选择</th>
+			<th class="col-feature">功能</th>
+			<th class="col-price">价格(元)</th>
+			<th class="col-time">时间(小时)</th>
+		</tr>
+		<tr>
+			<td><input name="rd" class="col-select" type="radio" /></td>
+			<td class="col-feature">
+				<strong id="feature1"></strong><br />
+			</td>
+			<td class="col-price">
+				<em id="price1"></em><br />
+			</td>
+			<td class="col-time">
+				<em id="time1"></em><br />
+			</td>
+		</tr>
+		<tr>
+			<td><input name="rd" class="col-select" type="radio" /></td>
+			<td class="col-feature">
+				<strong id="feature2"></strong><br />
+			</td>
+			<td class="col-price">
+				<em id="price2"></em><br />
+			</td>
+			<td class="col-time">
+				<em id="time2"></em><br />
+			</td>
+		</tr>
+		<tr>
+			<td><input name="rd" class="col-select" type="radio" /></td>
+			<td class="col-feature">
+				<strong id="feature2"></strong><br />
+			</td>
+			<td class="col-price">
+				<em id="price3"></em><br />
+			</td>
+			<td class="col-time">
+				<em id="time4"></em><br />
+			</td>
+		</tr>
+	</table>
+	<div class="setpage">
+		<div class="qrcode">
+			<img id="qrcodeimg" border="0" src="" alt="qrc_img">
+		</div>
+	
+		<div id="buybtndiv">
+			<input id=buybtn type="submit" value="获取支付信息" onclick="acceptBuy()" />
+		</div>
+	
+		<div id="qrcodeInfo"></div>
+		<div class="uppagediv">
+            <a href="/pages/index.html">返回</a>
+        </div>
+	</div>
+	
+</body>
+
+</html>

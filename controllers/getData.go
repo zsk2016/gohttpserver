@@ -2,7 +2,14 @@ package controllers
 
 import (
 	"fmt"
+	"strings"
+
 	// "sort"
+	// "bytes"
+	"crypto/md5"
+	"encoding/hex"
+	"io/ioutil"
+	"net/http"
 	"strconv"
 
 	// "gohttpserver/dbcontrollers"
@@ -34,6 +41,42 @@ type RetOrderInfo struct {
 	IfValid    bool
 	MustUpdate bool
 	Info       string
+}
+
+type BufPayPar struct {
+	RealizeId      string
+	UserName       string
+	ReturnLinkaddr string
+}
+
+type BufPayRequestPar struct {
+	RealizeId  string
+	Pname      string
+	BType      string
+	Price      string
+	Ptime      string
+	OrderId    string
+	UserName   string
+	ReturnLink string
+}
+
+type BufPayToBufPay struct {
+	Name       string `json:"name"`
+	Pay_type   string `json:"pay_type"`
+	Price      string `json:"price"`
+	Order_id   string `json:"order_id"`
+	Order_uid  string `json:"order_uid"`
+	Notify_url string `json:"notify_url"`
+	Return_url string `json:"return_url"`
+	Sign       string `json:"sign"`
+}
+
+type QrccodeInfoToClinet struct {
+	OrderId string
+	QrcType string
+	QrcCode string
+	QrPrice string
+	Price   string
 }
 
 func GetData(ctx *macaron.Context) {
@@ -157,5 +200,100 @@ func GetRealize(ctx *macaron.Context) {
 		Ok:    true,
 		Data:  "GetRealize",
 		Value: &raps,
+	})
+}
+
+func httpPos(url, jsonStr string) *QrccodeInfoToClinet {
+	fmt.Println("---httpPos---", jsonStr)
+	// payInfoDataBuf, _ := json.Marshal(jsonStr)
+	req, err := http.NewRequest("POST", url, strings.NewReader(jsonStr) /*bytes.NewBuffer(payInfoDataBuf)*/)
+
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+
+	client := &http.Client{}
+
+	resp, err := client.Do(req)
+
+	if err != nil {
+
+		// handle error
+
+	}
+	body, _ := ioutil.ReadAll(resp.Body)
+	var dat map[string]interface{}
+	json.Unmarshal([]byte(body), &dat)
+	qi := &QrccodeInfoToClinet{}
+	if dat["status"] == "ok" {
+		qi.QrcType = dat["pay_type"].(string)
+		qi.QrPrice = dat["qr_price"].(string)
+		qi.Price = dat["price"].(string)
+		qi.QrcCode = dat["qr_img"].(string)
+	}
+	return qi
+}
+
+func GetQRCodeUrl(ctx *macaron.Context) {
+	t := time.Now()
+	orderId := t.Format("20060102150405")
+	fmt.Println(orderId)
+	var ret bool = false
+
+	jsonStr := ctx.Query("GetQRCodeUrl")
+	bpp := &BufPayPar{}
+	err := json.Unmarshal([]byte(jsonStr), bpp)
+	if err != nil {
+		ret = false
+		ctx.JSON(200, &ContextResult{
+			Ok:    ret,
+			Data:  "GetRealize",
+			Value: "",
+		})
+		return
+	}
+
+	brp := &BufPayRequestPar{}
+	brp.RealizeId = bpp.RealizeId
+	brp.OrderId = orderId
+	brp.BType = "wechat"
+	brp.UserName = bpp.UserName
+	brp.ReturnLink = bpp.ReturnLinkaddr
+
+	sql := `SELECT *from "AK_RealizeAndPrice" WHERE "id" = ?`
+	dataMap, err := dbcontrollers.GetOrm().QueryString(sql, bpp.RealizeId)
+
+	for _, value := range dataMap {
+		brp.Pname = value["name"]
+		brp.Price = value["value"]
+		brp.Ptime = value["ptime"]
+		break
+	}
+	brp.ReturnLink += "PlaceOrder?Data=" + brp.UserName + "|" + brp.OrderId + "|" + brp.RealizeId + "|" + brp.Ptime
+	str := brp.Pname + brp.BType + brp.Price + brp.OrderId + brp.UserName + brp.ReturnLink + "http://www.kaidany.com" + "1f93e4388f7b4e45959f6accaa1cff28"
+
+	h := md5.New()
+	h.Write([]byte(str))
+	str = hex.EncodeToString(h.Sum(nil))
+	pay_data := &BufPayToBufPay{}
+	pay_data.Name = brp.Pname
+	pay_data.Pay_type = brp.BType
+	pay_data.Price = brp.Price
+	pay_data.Order_id = brp.OrderId
+	pay_data.Order_uid = brp.UserName
+	pay_data.Notify_url = brp.ReturnLink
+	pay_data.Return_url = "http://www.kaidany.com"
+	pay_data.Sign = str
+
+	bufStr := "name=" + brp.Pname + "&" + "pay_type=" + brp.BType + "&" + "price=" + brp.Price + "&" + "order_id=" + brp.OrderId + "&" + "order_uid=" + brp.UserName + "&" + "notify_url=" + brp.ReturnLink + "&" + "return_url=" + "http://www.kaidany.com" + "&" + "sign=" + str
+
+	// b, err := json.Marshal(pay_data)
+	// if err == nil {
+	// 	fmt.Println("json:", string(b))
+	// }
+	qi := httpPos("https://bufpay.com/api/pay/96967?format=json", bufStr)
+	qi.OrderId = orderId
+	ctx.JSON(200, &ContextResult{
+		Ok:    true,
+		Data:  "GetRealize",
+		Value: &qi,
 	})
 }

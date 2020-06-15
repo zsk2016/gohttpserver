@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="text/javascript" src="/js/qwebchannel.js"></script>
+    <script type="text/javascript" src="/js/qtmanager.js"></script>
+    <script type="text/javascript" src="/js/webrequest.js"></script>
+    <link rel="stylesheet" href="/css/index.css">
+</head>
+
+<body>
+    <div class="signindialog">
+        <h2 align="center">欢迎注册</h2>
+        <p align="center" class="p1">
+            用户名: <input id="signinusername" type="text">
+        </p>
+        <p align="center">
+            邮&emsp;箱: <input id="signinemail" type="text">
+        </p>
+        <p align="center">
+            密&emsp;码: <input id="signinpassword" type="text">
+        </p>
+        <p align="center">
+            公&emsp;司: <input id="signincompany" type="text">
+        </p>
+        <p align="center">
+            电&emsp;话: <input id="signinphone" type="text">
+        </p>
+        <div align="center" id="signinbtndiv">
+            <input id=signinbtn type="submit" value="注册" onclick="WebRequest('www', 'SignIn')" />
+        </div>
+        <div class="indexbtn">
+            <a href="/pages/index.html">返回</a>
+        </div>
+        <div id="signinrevalue"></div>
+</body>
+
+</html>

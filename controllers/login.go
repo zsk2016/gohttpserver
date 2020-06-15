@@ -48,7 +48,7 @@ func LogInFun(ctx *macaron.Context) {
 		changeCpuId(logInInfo.CpuId, logInInfo.UserName)
 	}
 
-	fmt.Println("--------ret-----", ret)
+	fmt.Println("--------ret-----", userInfo)
 
 	ctx.JSON(200, &ContextResult{
 		Ok:    ret,
