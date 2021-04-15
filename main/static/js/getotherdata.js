@@ -4,7 +4,7 @@ function getLogInData() {
     dataInfo = {
         "UserName": document.getElementById("loginusername").value,
         "Passwd": document.getElementById("loginpassword").value,
-        "CpuId": ""
+        "CpuId": window.sessionStorage.getItem("CpuId")
     }
     data += JSON.stringify(dataInfo);
     return data;
@@ -15,6 +15,7 @@ function setRetLogInData(data) {
         window.sessionStorage.setItem("UserName", data.value.UserName);
         window.sessionStorage.setItem("UserId", data.value.UserId);
         document.getElementById("revalue").innerHTML = "登录成功!";
+		onLogUserInfo(data.value.UserName, data.value.UserId);
         WebRequest('www', 'GetOrderByUser');
         //onLogInState(true);
     }

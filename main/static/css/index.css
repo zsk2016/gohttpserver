@@ -1,5 +1,5 @@
 body{
-    background-color: white;
+    background-color: rgb(112, 202, 247);
 }
 
 .logindialog h2{
@@ -41,7 +41,7 @@ input
     border-radius: 5px;
     margin: auto;
     padding-top: 20px;
-    background-color: darkturquoise;
+    background-color: rgb(112, 202, 247);
 }
 
 .logindialog .loginimg{
@@ -145,8 +145,8 @@ td{
 }
 
 .buybtndiv{
-    margin-top: 60px;
-    margin-left: 320px;
+    margin-top: 20px;
+    margin-left: 170px;
 }
 
 .buybtndiv #buybtn{
